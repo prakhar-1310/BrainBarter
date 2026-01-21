@@ -16,12 +16,26 @@ export function RoleSelection() {
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   const isAdminEmail = userEmail === adminEmail;
 
+  // Redirect if user is already onboarded
+  React.useEffect(() => {
+    if (user?.publicMetadata?.onboarded) {
+      const role = user.publicMetadata?.role || 'student';
+      if (role === 'creator') {
+        navigate('/creator-dashboard', { replace: true });
+      } else if (role === 'admin') {
+        navigate('/admin-dashboard', { replace: true });
+      } else {
+        navigate('/student-dashboard', { replace: true });
+      }
+    }
+  }, [user, navigate]);
+
   // If user is admin, auto-select admin role
   React.useEffect(() => {
     if (isAdminEmail && !selectedRole) {
       setSelectedRole('admin');
     }
-  }, [isAdminEmail]);
+  }, [isAdminEmail, selectedRole]);
 
   const roles = [
     {

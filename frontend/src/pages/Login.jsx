@@ -16,6 +16,11 @@ export function Login() {
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
           <p className="text-gray-600">Sign in to continue learning</p>
+          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800">
+              Don't have an account? <a href="/signup" className="font-semibold underline hover:text-blue-900">Sign up here</a>
+            </p>
+          </div>
         </div>
 
         {/* Clerk Sign In Component */}
@@ -24,7 +29,7 @@ export function Login() {
             routing="path"
             path="/login"
             signUpUrl="/signup"
-            redirectUrl="/dashboard"
+            fallbackRedirectUrl="/select-role"
             appearance={{
               elements: {
                 rootBox: "w-full",
