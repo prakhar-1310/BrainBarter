@@ -26,10 +26,8 @@ export function Login() {
         {/* Clerk Sign In Component */}
         <div className="flex justify-center">
           <SignIn 
-            routing="path"
-            path="/login"
             signUpUrl="/signup"
-            fallbackRedirectUrl="/select-role"
+            redirectUrl="/select-role"
             appearance={{
               elements: {
                 rootBox: "w-full",

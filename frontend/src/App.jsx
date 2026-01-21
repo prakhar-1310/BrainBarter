@@ -34,14 +34,20 @@ function ProtectedRoute({ children }) {
 
 // Homepage wrapper to redirect logged-in users
 function HomeRoute() {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   
-  if (user) {
-    // User is logged in, redirect to appropriate dashboard
-    if (!user.publicMetadata?.onboarded) {
-      return <Navigate to="/select-role" replace />;
-    }
-    
+  if (!isLoaded) {
+    return (
+      <>
+        <Navbar />
+        <Homepage />
+        <Footer />
+      </>
+    );
+  }
+  
+  // Only redirect fully authenticated and onboarded users
+  if (user?.publicMetadata?.onboarded) {
     const role = user.publicMetadata?.role || 'student';
     if (role === 'creator') {
       return <Navigate to="/creator-dashboard" replace />;
@@ -67,17 +73,9 @@ function AppRoutes() {
       {/* Public Routes */}
       <Route path="/" element={<HomeRoute />} />
       
-      <Route path="/login" element={
-        <SignedOut>
-          <Login />
-        </SignedOut>
-      } />
+      <Route path="/login" element={<Login />} />
       
-      <Route path="/signup" element={
-        <SignedOut>
-          <Signup />
-        </SignedOut>
-      } />
+      <Route path="/signup" element={<Signup />} />
       
       <Route path="/select-role" element={
         <SignedIn>
@@ -136,7 +134,9 @@ function AppRoutes() {
 
 const App = () => {
   return (
-    <ClerkProvider publishableKey={clerkPubKey}>
+    <ClerkProvider 
+      publishableKey={clerkPubKey}
+    >
       <Router>
         <AuthProvider>
           <AppRoutes />
